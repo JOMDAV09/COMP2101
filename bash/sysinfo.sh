@@ -1,18 +1,35 @@
 #!/bin/bash
 
-echo hostname: $( hostname )
-# displys the hostname of the computer
+# SYSTEM INFORMATION
 
-echo domain name: $( hostname -d )
-# displays the domain name of the computer if having 
+jhn=$(hostname)
+# jhn stores the hostname of the device
 
-echo operating system name and version: $( cat /etc/os-release | grep PRETTY )
-# displays the pretty operating system  
+jop=$(lsb_release -d -s)
+jup=$(uname -r)
+# jop and jup stores the operating system of the device
 
-echo Ip address :;
-ifconfig 2>stderr | grep flag | awk '{ print $1 }' | while read result ; do echo $result  $( ifconfig | grep -A4 $result | grep inet | sed s/"inet"// ) /n ; done 2>stderr
-# displays the ipv4 and ipv6 address of the device 
+jip=$(ip a s ens33 | grep -w inet | awk '{print $2}')
+# jip stores the ip address of the device 
 
-echo root filesystem status: ;
-df -h /
-# displays the root system file status of the device
+jrfs=$(du -sh)
+# jrfs stores the root free space
+
+
+cat <<EOF
+Report for $jhn
+
+============================================================
+
+
+FQDN: $jop
+
+Operating System name and version: $jop $juo
+
+IP Address: $jip
+
+Root Filesystem Free Space: $jrfs
+
+
+===========================================================
+EOF
